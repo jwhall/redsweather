@@ -7,7 +7,7 @@ import csv
 import tweepy     # twitter interface - see https://github.com/tweepy/tweepy
 import forecastio # weather data from Forecast.IO - see https://github.com/ZeevG/python-forecast.io
 
-'''
+
 class TwitterAPI:
     """Twitter interface. Code ganked from http://videlais.com/2015/03/02/how-to-create-a-basic-twitterbot-in-python/  """
     def __init__(self):
@@ -25,7 +25,7 @@ class TwitterAPI:
         self.api.update_status(status=message)
 
 forecastio_api_key = "" # forecast.io API key
-'''
+
 # dictionary of all MLB ballparks, including latitude and longitude
 teams = {
 	"cin": [39.096962, -84.503789, "Cincinnati", "Reds"], 
@@ -73,13 +73,11 @@ if __name__ == "__main__":
                 # search dictionary for the location
                 loc = teams[row['location']]                
                 if loc:
-                    #forecast = forecastio.load_forecast(api_key, loc[0], loc[1], time=gametime) # pull a forecast data block from the API
-                    #gamecast = forecast.currently() # pull the forecast data from that block for the 'current' time (which is our game time)
+                    forecast = forecastio.load_forecast(api_key, loc[0], loc[1], time=gametime) # pull a forecast data block from the API
+                    gamecast = forecast.currently() # pull the forecast data from that block for the 'current' time (which is our game time)
                     locstr = "at Great American Ballpark" if row['location'] == "cin" else 'in {}'.format(loc[2])
-                    #data = { 'time': row['time'], 'cast': gamecast.summary.lower(), 'temp': str(int(gamecast.temperature)), 'location': "Great American Ballpark" if loc =="cin" else loc[2], 'team': teams[loc[4]][3] } 
-                    data = { 'time': row['time'], 'cast': "Cloudy", 'temp': "75", 'location': locstr, 'team': teams[row['opponent']][3] }
+                    data = { 'time': row['time'], 'cast': gamecast.summary.lower(), 'temp': str(int(gamecast.temperature)), 'location': "Great American Ballpark" if loc =="cin" else loc[2], 'team': teams[row['opponent']][3] } 
                     status = 'Forecast for today\'s {time} gametime is {cast} and {temp}F at {location} vs the {team}.'.format(**data)
-                    #twitter = TwitterAPI()
-                    #twitter.tweet(status)
-                    print(status)
+                    twitter = TwitterAPI()
+                    twitter.tweet(status)
                     break
