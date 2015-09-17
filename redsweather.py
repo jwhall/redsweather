@@ -46,7 +46,7 @@ teams = {
 	"ari": [33.445645, -112.066713, "Arizona", "Diamondbacks"],
 	"mia": [25.778665, -80.22028, "Miami", "Marlins"],
 	"pit": [40.446855, -80.005666, "Pittsburgh", "Pirates"],
-	"mia": [43.027978, -87.97115, "Milwaukee", "Brewers"],
+	"mil": [43.027978, -87.97115, "Milwaukee", "Brewers"],
 	"det": [42.338998, -83.04852, "Detroit", "Tigers"],
 	"min": [44.981708, -93.277338, "Minnesota", "Twins"],
 	"bal": [39.283918, -76.621757, "Baltimore", "Orioles"],
@@ -73,7 +73,7 @@ if __name__ == "__main__":
                 # search dictionary for the location
                 loc = teams[row['location']]                
                 if loc:
-                    forecast = forecastio.load_forecast(api_key, loc[0], loc[1], time=gametime) # pull a forecast data block from the API
+                    forecast = forecastio.load_forecast(forecastio_api_key, loc[0], loc[1], time=gametime) # pull a forecast data block from the API
                     gamecast = forecast.currently() # pull the forecast data from that block for the 'current' time (which is our game time)
                     locstr = 'at Great American Ballpark' if row['location'] == "cin" else 'in {}'.format(loc[2])
                     data = { 'time': row['time'], 'cast': gamecast.summary.lower(), 'temp': str(int(gamecast.temperature)), 'location': locstr, 'team': teams[row['opponent']][3] } 
