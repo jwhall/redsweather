@@ -77,7 +77,7 @@ if __name__ == "__main__":
                     gamecast = forecast.currently() # pull the forecast data from that block for the 'current' time (which is our game time)
                     locstr = 'at Great American Ballpark' if row['location'] == "cin" else 'in {}'.format(loc[2])
                     data = { 'time': row['time'], 'cast': gamecast.summary.lower(), 'temp': str(int(gamecast.temperature)), 'location': locstr, 'team': teams[row['opponent']][3] } 
-                    status = 'Forecast for today\'s {time} gametime is {cast} and {temp}F at {location} vs the {team}.'.format(**data)
+                    status = 'Forecast for today\'s {time} gametime is {cast} and {temp}F {location} vs the {team}.'.format(**data)
                     twitter = TwitterAPI()
                     twitter.tweet(status)
                     break
