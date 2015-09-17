@@ -62,7 +62,7 @@ teams = {
 
 
 if __name__ == "__main__":
-    # csv file should have three columns: date,time,location,opponent
+    # csv file should have four columns: date,time,location,opponent
     # location and opponent are both listed as the city abbreviations seen above in the dictionary keys
     with open('2015.csv') as csvfile:
         reader = csv.DictReader(csvfile)
