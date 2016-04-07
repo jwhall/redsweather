@@ -64,7 +64,7 @@ teams = {
 if __name__ == "__main__":
     # csv file should have four columns: date,time,location,opponent
     # location and opponent are both listed as the city abbreviations seen above in the dictionary keys
-    with open('2015.csv') as csvfile:
+    with open('2016.csv') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             if row['date'] == datetime.date.today().strftime("%m/%d/%Y"):  # loop until we find today's date (if it exists in the file)
