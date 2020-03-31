@@ -15,3 +15,6 @@ You will need API keys for Twitter and Darksky/Forecast.io. The python-forecasti
 
 # use
 Run once a day for best results. Note that Twitter won't let you post the same status twice, so you will get a 403 upon trying to run the script a second time.
+
+# smod.py
+This script will take the CSV schedule published by the MLB (at https://www.mlb.com/reds/fans/downloadable-schedule#csv-format for example) and convert it for use by the twitter bot. I know it runs in my debugger for Python 3.8.2, YMMV. Godspeed if you run it yourself.
