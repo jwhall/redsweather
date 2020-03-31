@@ -149,7 +149,7 @@ response = requests.get("http://lookup-service-prod.mlb.com/json/named.org_game_
 dateinfo = response.json()['org_game_type_date_info']
 firstgamedate = datetime.fromisoformat(dateinfo["queryResults"]["row"][0]['first_game_date'])
 
-## Dump output file to year.csv, yay
+## Dump output file to year.csv, frickin finally
 
 outputfile = year + ".csv"
 
