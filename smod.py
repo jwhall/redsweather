@@ -12,7 +12,7 @@
 ##      - JWH March 31, 2020
 ##
 ##  Usage: run the script with a single argument, the input file
-##  Will dump $year.CSV (i.e. 2020.csv) to working dir
+##  Will dump $year.CSV (i.e. 2020.csv) to working dir for use by twitter bot script
 ##
 ##########################################################################################################
 
