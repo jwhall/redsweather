@@ -147,6 +147,9 @@ today = datetime.today()
 year = str(today.year)
 response = requests.get("http://lookup-service-prod.mlb.com/json/named.org_game_type_date_info.bam?current_sw='Y'&sport_code='mlb'&game_type='R'&season="+year)
 dateinfo = response.json()['org_game_type_date_info']
+
+## note that this line breaks compatibility with python earlier than 3.7. 
+
 firstgamedate = datetime.fromisoformat(dateinfo["queryResults"]["row"][0]['first_game_date'])
 
 ## Dump output file to year.csv, frickin finally
