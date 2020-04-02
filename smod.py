@@ -31,12 +31,11 @@ games = []
 loc = []
 
 ## Check for input file
-
-if len(sys.argv) < 1:
-    print("Usage: " + sys.argv[0] + " <input file>")
-    exit
-
-infile = sys.argv[1]
+try:
+	infile = sys.argv[1]
+except IndexError:
+	print("Usage: " + sys.argv[0] + " <input file>")
+	sys.exit(1)
 
 ## Subs for the names
 
@@ -103,14 +102,17 @@ shortnames = [("Cardinals", "stl"),
 
 ## Open CSV and read into lists
 
-with open (infile,'r') as sourcefile:   
-    reader = csv.DictReader(sourcefile, delimiter=',')
-    for row in reader:
-        dates.append(row["START DATE"])
-        times.append(row["START TIME ET"])
-        games.append(row["SUBJECT"])
-        loc.append(row["LOCATION"])
-
+try:
+	with open (infile,'r') as sourcefile:   
+	    reader = csv.DictReader(sourcefile, delimiter=',')
+	    for row in reader:
+	        dates.append(row["START DATE"])
+	        times.append(row["START TIME ET"])
+	        games.append(row["SUBJECT"])
+	        loc.append(row["LOCATION"])
+except NameError:
+	print("Usage: " + sys.argv[0] + " <input file>")
+	sys.exit(1)
 ## Change dates, swapping full year for short year
 
 for idx, gamedate in enumerate(dates):
@@ -148,9 +150,11 @@ year = str(today.year)
 response = requests.get("http://lookup-service-prod.mlb.com/json/named.org_game_type_date_info.bam?current_sw='Y'&sport_code='mlb'&game_type='R'&season="+year)
 dateinfo = response.json()['org_game_type_date_info']
 
-## note that this line breaks compatibility with python earlier than 3.7. 
-
-firstgamedate = datetime.fromisoformat(dateinfo["queryResults"]["row"][0]['first_game_date'])
+try:
+	firstgamedate = datetime.fromisoformat(dateinfo["queryResults"]["row"][0]['first_game_date'])
+except AttributeError:
+	print("Sorry, this script requires Python > 3.7.")
+	sys.exit(1)
 
 ## Dump output file to year.csv, frickin finally
 
