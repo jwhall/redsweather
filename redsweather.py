@@ -1,22 +1,24 @@
+#!/usr/bin/python
 # RedsWeather.py
 # by Justin Hall - github.com/jwhall - 2015
 # some edits by Alex Kuhl - github.com/alexkuhl
 
-import datetime   
+import datetime
 import csv
 import tweepy     # twitter interface - see https://github.com/tweepy/tweepy
-import forecastio # weather data from Forecast.IO - see https://github.com/ZeevG/python-forecast.io
 
+from pyowm import OWM	# Free API from https://openweathermap.org/api, code from https://github.com/csparpa/pyowm
+from pyowm.utils import config
+from pyowm.utils import timestamps
 
 class TwitterAPI:
     """Twitter interface. Code ganked from http://videlais.com/2015/03/02/how-to-create-a-basic-twitterbot-in-python/  """
     def __init__(self):
         # Twitter API keys from apps.twitter.com
-        consumer_key = ""  
-        consumer_secret = "" 
-        access_token = ""
-        access_token_secret = ""
-        
+        consumer_key = "fill_in_yours"
+        consumer_secret = "fill_in_yours"
+        access_token = "fill_in_yours"
+        access_token_secret = "fill_in_yours"
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         auth.set_access_token(access_token, access_token_secret)
         self.api = tweepy.API(auth)
@@ -24,12 +26,14 @@ class TwitterAPI:
     def tweet(self, message):
         self.api.update_status(status=message)
 
-forecastio_api_key = "" # forecast.io API key
+owm_api_key = "fill_in_yours"
+owm = OWM(owm_api_key)
+mgr = owm.weather_manager()
 
 # dictionary of all MLB ballparks, including latitude and longitude
 teams = {
 	"cin": [39.096962, -84.503789, "Cincinnati", "Reds"], 
-	"stl": [38.627003, -90.199404, "St. Louis", "Cardinals"], 
+	"stl": [38.627003, -90.199404, "St. Louis", "Whiny Birds"], 
 	"col": [39.755942, -104.993983, "Denver", "Rockies"],
 	"nym": [40.755385, -73.846364, "New York", "Mets"],
 	"nyy": [40.829643, -73.926175, "New York", "Yankees"],
@@ -60,24 +64,25 @@ teams = {
 	"phi": [39.906057, -75.166495, "Philadelphia", "Phillies"]
 }
 
-
 if __name__ == "__main__":
     # csv file should have four columns: date,time,location,opponent
     # location and opponent are both listed as the city abbreviations seen above in the dictionary keys
-    with open('2019.csv') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            if row['date'] == datetime.date.today().strftime("%m/%d/%Y"):  # loop until we find today's date (if it exists in the file)
-                gametime = datetime.datetime.strptime(row['date'] + " " + row['time'], "%m/%d/%Y %I:%M%p")  # convert date to forecast.io format
-            
-                # search dictionary for the location
-                loc = teams[row['location']]                
-                if loc:
-                    forecast = forecastio.load_forecast(forecastio_api_key, loc[0], loc[1], time=gametime) # pull a forecast data block from the API
-                    gamecast = forecast.currently() # pull the forecast data from that block for the 'current' time (which is our game time)
-                    locstr = 'at Great American Ballpark' if row['location'] == "cin" else 'in {}'.format(loc[2])
-                    data = { 'time': row['time'], 'cast': gamecast.summary.lower(), 'temp': str(int(gamecast.temperature)), 'location': locstr, 'team': teams[row['opponent']][3] } 
-                    status = 'Forecast for today\'s {time} gametime is {cast} and {temp}F {location} vs the {team}.'.format(**data)
-                    twitter = TwitterAPI()
-                    twitter.tweet(status)
-                    break
+	with open('./test.csv') as csvfile:
+		reader = csv.DictReader(csvfile)
+		for row in reader:
+			if row['date'] == datetime.date.today().strftime("%m/%d/%Y"):  # loop until we find today's date (if it exists in the file)
+				gametime = datetime.datetime.strptime(row['date'] + " " + row['time'], "%m/%d/%Y %I:%M%p")  # convert date to forecast.io format
+				# search dictionary for the location
+				loc = teams[row['location']]
+				if loc:
+					#forecast = forecastio.load_forecast(forecastio_api_key, loc[0], loc[1], time=gametime) # pull a forecast data block from the API
+					forecast = mgr.forecast_at_coords(loc[0], loc[1], '3h')
+					#gamecast = forecast.currently() # pull the forecast data from that block for the 'current' time (which is our game time)
+					gamecast = forecast.get_weather_at(gametime)
+					t = gamecast.temperature('fahrenheit')
+					locstr = 'at Great American Ballpark' if row['location'] == "cin" else 'in {}'.format(loc[2])
+					data = { 'time': row['time'], 'cast': gamecast.status.lower(), 'temp': round(t["temp"]), 'location': locstr, 'team': teams[row['opponent']][3] } 
+					status = 'Forecast for today\'s {time} gametime is {cast} and {temp}F {location} vs the {team}.'.format(**data)
+					twitter = TwitterAPI()					
+					twitter.tweet(status)
+					break
