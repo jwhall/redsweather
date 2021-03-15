@@ -9,12 +9,9 @@ This is written for Python 3.3 and greater. You need a few libraries to make thi
 - Python-Forecastio, from https://github.com/ZeevG/python-forecast.io
 - Tweepy, from https://github.com/tweepy/tweepy (which requires python 3.3)
 
-You will also need a CSV of your team's schedule. Check out 2017.csv for an example of what the columns should look like. I got mine from http://cincinnati.reds.mlb.com/schedule/downloadable.jsp?c_id=cin#csv-format, your team probably has something similar. I chopped out most of the data in the MLB CSV and got it to the one here.
+You will also need a CSV of your team's schedule. Check out the CSVs included for an example of what the columns should look like. I got mine from http://cincinnati.reds.mlb.com/schedule/downloadable.jsp?c_id=cin#csv-format, your team probably has something similar. I chopped out most of the data in the MLB CSV and got it to the one here.
 
-You will need API keys for Twitter and Darksky/Forecast.io. The python-forecastio Github page has great instructions on getting one for Darksky, and I used this blog post - http://videlais.com/2015/03/02/how-to-create-a-basic-twitterbot-in-python/ - to learn how to set up Twitter's OAuth (and also their code to post w/tweepy).
+You will need API keys for Twitter and OpenWeatherMap. I used this blog post - http://videlais.com/2015/03/02/how-to-create-a-basic-twitterbot-in-python/ - to learn how to set up Twitter's OAuth (and also their code to post w/tweepy). For OWM's API, I am using PyOWM by @csparpa, available at https://github.com/csparpa/pyowm.
 
 # use
 Run once a day for best results. Note that Twitter won't let you post the same status twice, so you will get a 403 upon trying to run the script a second time.
-
-# smod.py
-This script will take the CSV schedule published by the MLB (at https://www.mlb.com/reds/fans/downloadable-schedule#csv-format for example) and convert it for use by the twitter bot. I know it runs in my debugger for Python 3.8.2, YMMV. Godspeed if you run it yourself.
