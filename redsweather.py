@@ -44,7 +44,7 @@ teams = {
 	"oak": [37.751595, -122.200546, "Oakland", "Athletics"],
 	"sf":  [37.751595, -122.200546, "San Francisco", "Giants"],
 	"sd":  [32.707709, -117.157085, "San Diego", "Padres"],
-	"cle": [41.496211, -81.685229, "Cleveland", "Indians"],
+	"cle": [41.496211, -81.685229, "Cleveland", "Guardians"],
 	"kc":  [39.051105, -94.481087, "Kansas City", "Royals"],
 	"tor": [43.641438, -79.389353, "Toronto", "Blue Jays"],
 	"ari": [33.445645, -112.066713, "Arizona", "Diamondbacks"],
